@@ -718,9 +718,9 @@ void AFortPlayerController::ServerAttemptAircraftJumpHook(AFortPlayerController*
 	auto Inventory = PlayerController->GetWorldInventory();
 
 	UFortItemDefinition* TEMP;
-	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/WoodItemData.WoodItemData"); Inventory->AddItem(TEMP, nullptr, 999);
-	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/StoneItemData.StoneItemData"); Inventory->AddItem(TEMP, nullptr, 999); // mats
-	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/MetalItemData.MetalItemData"); Inventory->AddItem(TEMP, nullptr, 999);
+	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/WoodItemData.WoodItemData"); Inventory->AddItem(TEMP, nullptr, 70);
+	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/StoneItemData.StoneItemData"); Inventory->AddItem(TEMP, nullptr, 50); // mats
+	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/MetalItemData.MetalItemData"); Inventory->AddItem(TEMP, nullptr, 30);
 	// TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Traps/TID_Floor_Player_Launch_Pad_Athena.TID_Floor_Player_Launch_Pad_Athena"); Inventory->AddItem(TEMP, nullptr, 2);
 
 	TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsMedium.AthenaAmmoDataBulletsMedium"); Inventory->AddItem(TEMP, nullptr, 999);
@@ -729,8 +729,8 @@ void AFortPlayerController::ServerAttemptAircraftJumpHook(AFortPlayerController*
 	TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsLight.AthenaAmmoDataBulletsLight"); Inventory->AddItem(TEMP, nullptr, 999);
 	TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AmmoDataRockets.AmmoDataRockets"); Inventory->AddItem(TEMP, nullptr, 999);
 
-	auto AR = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_AR.WID_Boss_Adventure_AR"); Inventory->AddItem(AR, nullptr, 1);
-	auto Shotgun = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_VR_Ore_T03.WID_Shotgun_Standard_Athena_VR_Ore_T03"); Inventory->AddItem(Shotgun, nullptr, 1);
+	auto AR = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_BoltAction_Scope_Athena_R_Ore_T03.WID_Sniper_BoltAction_Scope_Athena_R_Ore_T03"); Inventory->AddItem(AR, nullptr, 1);
+	auto Shotgun = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_NoScope_Athena_R_Ore_T03.WID_Sniper_NoScope_Athena_R_Ore_T03"); Inventory->AddItem(Shotgun, nullptr, 1);
 	auto SMG = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_GH.WID_Boss_Adventure_GH"); Inventory->AddItem(SMG, nullptr, 1);
 	auto SNIPER = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_Heavy_Athena_SR_Ore_T03.WID_Sniper_Heavy_Athena_SR_Ore_T03"); Inventory->AddItem(SNIPER, nullptr, 1);
 	auto FISH = FindObject<UFortItemDefinition>("/Game/Athena/Items/Consumables/ShockwaveGrenade/Athena_ShockGrenade.Athena_ShockGrenade"); Inventory->AddItem(FISH, nullptr, 6);
