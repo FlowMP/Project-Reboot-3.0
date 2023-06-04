@@ -60,7 +60,7 @@
 #define LOADOUT_PLAYERTAB 4
 #define FUN_PLAYERTAB 5
 
-extern inline int SecondsUntilTravel = 5;
+extern inline int SecondsUntilTravel = 20;
 extern inline bool bSwitchedInitialLevel = false;
 extern inline bool bIsInAutoRestart = false;
 extern inline float AutoBusStartSeconds = 60;
