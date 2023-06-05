@@ -26,6 +26,7 @@
 #include "FortAthenaMutator_TDM.h"
 #include "GameplayStatics.h"
 #include "FortInventory.h"
+#include "discord.h"
 
 void AFortPlayerController::ClientReportDamagedResourceBuilding(ABuildingSMActor* BuildingSMActor, EFortResourceType PotentialResourceType, int PotentialResourceCount, bool bDestroyed, bool bJustHitWeakspot)
 {
