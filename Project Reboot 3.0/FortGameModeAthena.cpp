@@ -1446,7 +1446,7 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 	auto& ClientConnections = WorldNetDriver->GetClientConnections();
 
 	if (ClientConnections.Num() >= Globals::PlayersToStartMatch) {
-		float Duration = 30;
+		int Duration = 60;
 
 		float TimeSeconds = GameState->GetServerWorldTimeSeconds(); // UGameplayStatics::GetTimeSeconds(GetWorld());
 
@@ -1457,6 +1457,8 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 
 		GameState->Get<float>(WarmupCountdownEndTimeOffset) = TimeSeconds + Duration;
 		GameMode->Get<float>(WarmupCountdownDurationOffset) = Duration;
+		Globals::SkunkyBusCountdown = Duration;
+		Globals::bStartedCountdown = true;
 	}
 	
 	return Athena_HandleStartingNewPlayerOriginal(GameMode, NewPlayerActor);

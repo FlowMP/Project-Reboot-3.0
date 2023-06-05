@@ -86,8 +86,6 @@ static inline void CleanupDeviceD3D();
 static inline void ResetDevice();
 static inline LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-extern inline bool bStartedBus = false;
-
 static inline void Restart() // todo move?
 {
 	FString LevelA = Engine_Version < 424
@@ -111,7 +109,7 @@ static inline void Restart() // todo move?
 	Globals::bInitializedPlaylist = false;
 	Globals::bStartedListening = false;
 	Globals::bHitReadyToStartMatch = false;
-	bStartedBus = false;
+	Globals::bStartedBus = false;
 	AmountOfRestarts++;
 
 	LOG_INFO(LogDev, "Switching!");
@@ -470,7 +468,7 @@ static inline void MainUI()
 			{
 				StaticUI();
 
-				if (!bStartedBus)
+				if (!Globals::bStartedBus)
 				{
 					bool bWillBeLategame = Globals::bLateGame.load();
 					ImGui::Checkbox("Lategame (HIGHLY EXPERIMENTAL)", &bWillBeLategame);
@@ -585,14 +583,14 @@ static inline void MainUI()
 				}
 				*/
 
-				if (!bStartedBus)
+				if (!Globals::bStartedBus)
 				{
 					ImGui::SliderInt("Players to start bus countdown", &Globals::PlayersToStartMatch, 1, 100);
 					if (Globals::bLateGame.load() || Fortnite_Version >= 11)
 					{
 						if (ImGui::Button("Start Bus"))
 						{
-							bStartedBus = true;
+							Globals::bStartedBus = true;
 
 							auto GameMode = (AFortGameModeAthena*)GetWorld()->GetGameMode();
 							auto GameState = GameMode->GetGameState();
@@ -727,7 +725,7 @@ static inline void MainUI()
 					{
 						if (ImGui::Button("Start Bus Countdown"))
 						{
-							bStartedBus = true;
+							Globals::bStartedBus = true;
 
 							auto GameMode = (AFortGameMode*)GetWorld()->GetGameMode();
 							auto GameState = GameMode->GetGameState();

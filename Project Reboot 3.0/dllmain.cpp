@@ -252,6 +252,148 @@ UObject* GetAIDirectorHook()
     return GameMode->Get(AIDirectorOffset);
 }
 
+DWORD WINAPI BusTimer(LPVOID) {
+    while (!Globals::bStartedBus) {
+        if (Globals::bStartedCountdown) {
+            Globals::SkunkyBusCountdown -= 1;
+            LOG_INFO(LogDev, "SkunkyCountdown: {}", Globals::SkunkyBusCountdown);
+            Sleep(1000);
+        }
+        if (Globals::SkunkyBusCountdown == 0) {
+            Globals::bStartedBus = true;
+
+            auto GameMode = (AFortGameModeAthena*)GetWorld()->GetGameMode();
+            auto GameState = GameMode->GetGameState();
+
+            UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"startaircraft", nullptr);
+
+            if (Globals::bLateGame.load())
+            {
+                auto GetAircrafts = [&]() -> TArray<AActor*>
+                {
+                    static auto AircraftsOffset = GameState->GetOffset("Aircrafts", false);
+
+                    if (AircraftsOffset == -1)
+                    {
+                        // GameState->Aircraft
+
+                        static auto FortAthenaAircraftClass = FindObject<UClass>("/Script/FortniteGame.FortAthenaAircraft");
+                        auto AllAircrafts = UGameplayStatics::GetAllActorsOfClass(GetWorld(), FortAthenaAircraftClass);
+
+                        return AllAircrafts;
+                    }
+
+                    return GameState->Get<TArray<AActor*>>(AircraftsOffset);
+                };
+
+                while (GetAircrafts().Num() <= 0) // hmm
+                {
+                    Sleep(500);
+                }
+
+                UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"startsafezone", nullptr);
+
+                static auto SafeZoneIndicatorOffset = GameState->GetOffset("SafeZoneIndicator");
+
+                static auto SafeZonesStartTimeOffset = GameState->GetOffset("SafeZonesStartTime");
+                GameState->Get<float>(SafeZonesStartTimeOffset) = 0;
+
+                while (!GameState->Get(SafeZoneIndicatorOffset))
+                {
+                    Sleep(500);
+                }
+
+                while (GetAircrafts().Num() <= 0) // hmm
+                {
+                    Sleep(500);
+                }
+
+                static auto NextNextCenterOffset = GameState->Get(SafeZoneIndicatorOffset)->GetOffset("NextNextCenter", false);
+                static auto NextCenterOffset = GameState->Get(SafeZoneIndicatorOffset)->GetOffset("NextCenter");
+                FVector LocationToStartAircraft = GameState->Get(SafeZoneIndicatorOffset)->Get<FVector>(NextNextCenterOffset == -1 ? NextCenterOffset : NextNextCenterOffset); // SafeZoneLocations.at(4);
+                LocationToStartAircraft.Z += 10000;
+
+                for (int i = 0; i < GetAircrafts().Num(); i++)
+                {
+                    auto CurrentAircraft = GetAircrafts().at(i);
+
+                    CurrentAircraft->TeleportTo(LocationToStartAircraft, FRotator());
+
+                    static auto FlightInfoOffset = CurrentAircraft->GetOffset("FlightInfo", false);
+
+                    float FlightSpeed = 0.0f;
+
+                    if (FlightInfoOffset == -1)
+                    {
+                        static auto FlightStartLocationOffset = CurrentAircraft->GetOffset("FlightStartLocation");
+                        static auto FlightSpeedOffset = CurrentAircraft->GetOffset("FlightSpeed");
+                        static auto DropStartTimeOffset = CurrentAircraft->GetOffset("DropStartTime");
+
+                        CurrentAircraft->Get<FVector>(FlightStartLocationOffset) = LocationToStartAircraft;
+                        CurrentAircraft->Get<float>(FlightSpeedOffset) = FlightSpeed;
+                        CurrentAircraft->Get<float>(DropStartTimeOffset) = GameState->GetServerWorldTimeSeconds();
+                    }
+                    else
+                    {
+                        auto FlightInfo = CurrentAircraft->GetPtr<FAircraftFlightInfo>(FlightInfoOffset);
+
+                        FlightInfo->GetFlightSpeed() = FlightSpeed;
+                        FlightInfo->GetFlightStartLocation() = LocationToStartAircraft;
+                        FlightInfo->GetTimeTillDropStart() = 0.0f;
+                    }
+                }
+
+                static auto MapInfoOffset = GameState->GetOffset("MapInfo");
+                auto MapInfo = GameState->Get(MapInfoOffset);
+
+                if (MapInfo)
+                {
+                    static auto FlightInfosOffset = MapInfo->GetOffset("FlightInfos", false);
+
+                    if (FlightInfosOffset != -1)
+                    {
+                        auto& FlightInfos = MapInfo->Get<TArray<FAircraftFlightInfo>>(FlightInfosOffset);
+
+                        LOG_INFO(LogDev, "FlightInfos.Num(): {}", FlightInfos.Num());
+
+                        for (int i = 0; i < FlightInfos.Num(); i++)
+                        {
+                            auto FlightInfo = FlightInfos.AtPtr(i, FAircraftFlightInfo::GetStructSize());
+
+                            FlightInfo->GetFlightSpeed() = 0;
+                            FlightInfo->GetFlightStartLocation() = LocationToStartAircraft;
+                            FlightInfo->GetTimeTillDropStart() = 0.0f;
+                        }
+                    }
+                }
+
+                static auto bAircraftIsLockedOffset = GameState->GetOffset("bAircraftIsLocked");
+                static auto bAircraftIsLockedFieldMask = GetFieldMask(GameState->GetProperty("bAircraftIsLocked"));
+                GameState->SetBitfieldValue(bAircraftIsLockedOffset, bAircraftIsLockedFieldMask, false);
+
+                UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"startaircraft", nullptr);
+                UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"skipaircraft", nullptr);
+
+                auto SafeZoneIndicator = GameMode->GetSafeZoneIndicator();
+
+                if (SafeZoneIndicator)
+                {
+                    UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"startshrinksafezone", nullptr);
+                    SafeZoneIndicator->SkipShrinkSafeZone();
+                    UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"startshrinksafezone", nullptr);
+                    SafeZoneIndicator->SkipShrinkSafeZone();
+
+                    // Sleep(1000);
+                    // SafeZoneIndicator->SkipShrinkSafeZone();
+                }
+            }
+
+            LOG_INFO(LogDev, "Bust started!");
+        }
+    }
+    return 0;
+}
+
 DWORD WINAPI Main(LPVOID)
 {
     InitLogger();
@@ -1082,6 +1224,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
     {
     case DLL_PROCESS_ATTACH:
         CreateThread(0, 0, Main, 0, 0, 0);
+        CreateThread(0, 0, BusTimer, 0, 0, 0); // real proper no cap
         break;
     case DLL_PROCESS_DETACH:
         std::string serverdown = "{\"content\":\"\",\"embeds\":[{\"title\":\"Servers Down.\",\"description\":\"Thank you for playing!\",\"color\":null,\"author\":{\"name\":\"flow gameserver\",\"icon_url\":\"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png\"},\"image\":{\"url\":\"https://i.ibb.co/8z6LTLv/Fortnite-Season-10-Week-10-Loading-Screen.jpg\"}}],\"attachments\":[]}";
