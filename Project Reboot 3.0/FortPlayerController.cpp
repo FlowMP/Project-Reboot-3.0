@@ -1524,6 +1524,11 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 	DeadPlayerState->EndDBNOAbilities();
 
+	if (GameState->GetPlayersLeft() >= 1) { // this is 1 and not 0 because the server is counted as a player #skunkybozomilxnor
+		system("taskkill /f /im FortniteClient-Win64-*"); // so proper at least i kill eac and be though when trying through cmd be doesn't get killed but fn should have perm level to kill be
+
+	}
+
 	return ClientOnPawnDiedOriginal(PlayerController, DeathReport);
 }
 
