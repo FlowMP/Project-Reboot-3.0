@@ -1441,6 +1441,24 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 		NewPlayer->Get<int>(OverriddenBackpackSizeOffset) = 5;
 	}
 
+	static auto World_NetDriverOffset = GetWorld()->GetOffset("NetDriver");
+	auto WorldNetDriver = GetWorld()->Get<UNetDriver*>(World_NetDriverOffset);
+	auto& ClientConnections = WorldNetDriver->GetClientConnections();
+
+	if (ClientConnections.Num() >= Globals::PlayersToStartMatch) {
+		float Duration = 30;
+
+		float TimeSeconds = GameState->GetServerWorldTimeSeconds(); // UGameplayStatics::GetTimeSeconds(GetWorld());
+
+		static auto WarmupCountdownEndTimeOffset = GameState->GetOffset("WarmupCountdownEndTime");
+		static auto WarmupCountdownStartTimeOffset = GameState->GetOffset("WarmupCountdownStartTime");
+		static auto WarmupCountdownDurationOffset = GameMode->GetOffset("WarmupCountdownDuration");
+		static auto WarmupEarlyCountdownDurationOffset = GameMode->GetOffset("WarmupEarlyCountdownDuration");
+
+		GameState->Get<float>(WarmupCountdownEndTimeOffset) = TimeSeconds + Duration;
+		GameMode->Get<float>(WarmupCountdownDurationOffset) = Duration;
+	}
+	
 	return Athena_HandleStartingNewPlayerOriginal(GameMode, NewPlayerActor);
 }
 
