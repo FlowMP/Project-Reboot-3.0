@@ -587,6 +587,7 @@ static inline void MainUI()
 
 				if (!bStartedBus)
 				{
+					ImGui::SliderInt("Players to start bus countdown", &Globals::PlayersToStartMatch, 1, 100);
 					if (Globals::bLateGame.load() || Fortnite_Version >= 11)
 					{
 						if (ImGui::Button("Start Bus"))
