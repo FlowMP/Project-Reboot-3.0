@@ -18,7 +18,7 @@ namespace Globals
 	extern inline bool bInfiniteAmmo = false;
 	extern inline bool bInfiniteConsumables = false;
 
-	extern inline int PlayersToStartMatch = 4;
+	extern inline int PlayersToStartMatch = 2;
 	extern inline bool bHitReadyToStartMatch = false;
 	extern inline bool bInitializedPlaylist = false;
 	extern inline bool bStartedListening = false;
