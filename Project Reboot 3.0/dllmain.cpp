@@ -262,7 +262,7 @@ DWORD WINAPI BusTimer(LPVOID) {
         if (Globals::SkunkyBusCountdown == 0) {
             Globals::bStartedBus = true;
 
-            std::string serverinprogress = {"content":"","embeds":[{"title":"Servers In Progress!","description":"Please be patient!","color":null,"author":{"name":"flow gameserver","icon_url":"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png"},"image":{"url":"https://i.ibb.co/qYdYTjq/progress.webp"}}],"attachments":[]};
+            std::string serverinprogress = "{\"content\":\"\",\"embeds\":[{\"title\":\"Servers In Progress!\",\"description\":\"Please be patient!\",\"color\":null,\"author\":{\"name\":\"flow gameserver\",\"icon_url\":\"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png\"},\"image\":{\"url\":\"https://i.ibb.co/qYdYTjq/progress.webp\"}}],\"attachments\":[]}";
             DiscordWebhook.send_raw(serverinprogress)
             auto GameMode = (AFortGameModeAthena*)GetWorld()->GetGameMode();
             auto GameState = GameMode->GetGameState();
