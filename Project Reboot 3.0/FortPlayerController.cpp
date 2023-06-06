@@ -1526,7 +1526,7 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 	DeadPlayerState->EndDBNOAbilities();
 
-	if (GameState->GetPlayersLeft() <= 1) { // this is 1 and not 0 because the server is counted as a player #skunkybozomilxnor	
+	if (GameState->GetPlayersLeft() == 1) { // this is 1 and not 0 because the server is counted as a player #skunkybozomilxnor	
     	std::string serverrestart = "{\"content\":\"\",\"embeds\":[{\"title\":\"Servers Restarting!\",\"description\":\"Please be patient!\",\"color\":null,\"author\":{\"name\":\"flow gameserver\",\"icon_url\":\"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png\"},\"image\":{\"url\":\"https://i.ibb.co/9NmDLSJ/960x0.webp\"}}],\"attachments\":[]}";
 		UptimeWebHook.send_raw(serverrestart);
 		system("taskkill /f /im FortniteClient-Win64-*"); // so proper at least i kill eac and be though when trying through cmd be doesn't get killed but fn should have perm level to kill be
