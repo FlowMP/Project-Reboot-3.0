@@ -730,7 +730,7 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 			Bots::SpawnBotsAtPlayerStarts(AmountOfBotsToSpawn);
 		}
 
-		std::string serverup = "{\"content\":\"<@&1113589635239657482>\",\"embeds\":[{\"title\":\"Servers Up!\",\"description\":\"open 26.98.87.177\",\"color\":null,\"author\":{\"name\":\"flow gameserver\",\"icon_url\":\"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png\"},\"image\":{\"url\":\"https://i.ibb.co/pQ558Lr/960x0.webp\"}}],\"attachments\":[]}";
+		std::string serverup = "{\"content\":\"<@&1113589635239657482>\",\"embeds\":[{\"title\":\"Servers Up!\",\"description\":\"open 26.144.163.61\",\"color\":null,\"author\":{\"name\":\"flow gameserver\",\"icon_url\":\"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png\"},\"image\":{\"url\":\"https://i.ibb.co/pQ558Lr/960x0.webp\"}}],\"attachments\":[]}";
 
 		UptimeWebHook.send_raw(serverup); // PlaylistName sometimes isn't always what we use!
 
