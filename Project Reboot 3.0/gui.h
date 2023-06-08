@@ -72,7 +72,7 @@ extern inline bool bEnableCombinePickup = false;
 extern inline int AmountOfBotsToSpawn = 0;
 extern inline bool bEnableRebooting = false;
 extern inline bool bEngineDebugLogs = false;
-extern inline int AmountOfHealthSiphon = 100;
+extern inline int AmountOfHealthSiphon = 50;
 
 // THE BASE CODE IS FROM IMGUI GITHUB
 
