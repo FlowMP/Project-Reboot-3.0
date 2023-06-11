@@ -709,35 +709,45 @@ void AFortPlayerController::ServerAttemptAircraftJumpHook(AFortPlayerController*
 			auto busclass = FindObject<UClass>("/Game/Athena/Aircraft/AthenaAircraft.AthenaAircraft_C");
 			auto busses = UGameplayStatics::GetAllActorsOfClass(GetWorld(), busclass);
 			busses.Num();
-
-			NewPawnAsFort->SetShield(100);			
+			
 			NewPawnAsFort->TeleportTo(busses.at(0)->GetActorLocation(), {0, 0, 0});
 
+			auto Inventory = PlayerController->GetWorldInventory();
+
+			UFortItemDefinition* TEMP;
+			TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/WoodItemData.WoodItemData"); Inventory->AddItem(TEMP, nullptr, 500);
+			TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/StoneItemData.StoneItemData"); Inventory->AddItem(TEMP, nullptr, 500); // mats
+			TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/MetalItemData.MetalItemData"); Inventory->AddItem(TEMP, nullptr, 500);
+			// TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Traps/TID_Floor_Player_Launch_Pad_Athena.TID_Floor_Player_Launch_Pad_Athena"); Inventory->AddItem(TEMP, nullptr, 2);
+
+			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsMedium.AthenaAmmoDataBulletsMedium"); Inventory->AddItem(TEMP, nullptr, 999);
+			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsHeavy.AthenaAmmoDataBulletsHeavy"); Inventory->AddItem(TEMP, nullptr, 999);
+			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataShells.AthenaAmmoDataShells"); Inventory->AddItem(TEMP, nullptr, 999); // ammo
+			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsLight.AthenaAmmoDataBulletsLight"); Inventory->AddItem(TEMP, nullptr, 999);
+			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AmmoDataRockets.AmmoDataRockets"); Inventory->AddItem(TEMP, nullptr, 999);
+
+			if (PlaylistName.contains("Playlist_Low")) {
+				auto AR = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_NoScope_Athena_UC_Ore_T03.WID_Sniper_NoScope_Athena_UC_Ore_T03"); Inventory->AddItem(AR, nullptr, 1);
+				auto Shotgun = FindObject<UFortItemDefinition>("/Mantis/Items/UncleBrolly/WID_UncleBrolly.WID_UncleBrolly"); Inventory->AddItem(Shotgun, nullptr, 1);
+				auto SMG = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_GH.WID_Boss_Adventure_GH"); Inventory->AddItem(SMG, nullptr, 1);
+				auto SNIPER = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_Heavy_Athena_SR_Ore_T03.WID_Sniper_Heavy_Athena_SR_Ore_T03"); Inventory->AddItem(SNIPER, nullptr, 1);
+				auto FISH = FindObject<UFortItemDefinition>("/Game/Athena/Items/Consumables/ShockwaveGrenade/Athena_ShockGrenade.Athena_ShockGrenade"); Inventory->AddItem(FISH, nullptr, 6);
+			}
+			else {
+				auto AR = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03"); Inventory->AddItem(AR, nullptr, 1);
+				auto Shotgun = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_AR.WID_Boss_Adventure_AR"); Inventory->AddItem(Shotgun, nullptr, 1);
+				auto SMG = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_GH.WID_Boss_Adventure_GH"); Inventory->AddItem(SMG, nullptr, 1);
+				auto SNIPER = FindObject<UFortItemDefinition>("/Game/Athena/Items/Consumables/Bucket/Nice/WID_Athena_Bucket_Nice.WID_Athena_Bucket_Nice"); Inventory->AddItem(SNIPER, nullptr, 1);
+				auto FISH = FindObject<UFortItemDefinition>("/Game/Athena/Items/Consumables/ShockwaveGrenade/Athena_ShockGrenade.Athena_ShockGrenade"); Inventory->AddItem(FISH, nullptr, 6);
+				NewPawnAsFort->SetShield(100);
+			}
+
+
+			Inventory->Update();
 		}
 
 	}
 
-	auto Inventory = PlayerController->GetWorldInventory();
-
-	UFortItemDefinition* TEMP;
-	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/WoodItemData.WoodItemData"); Inventory->AddItem(TEMP, nullptr, 500);
-	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/StoneItemData.StoneItemData"); Inventory->AddItem(TEMP, nullptr, 500); // mats
-	TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/MetalItemData.MetalItemData"); Inventory->AddItem(TEMP, nullptr, 500);
-	// TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Traps/TID_Floor_Player_Launch_Pad_Athena.TID_Floor_Player_Launch_Pad_Athena"); Inventory->AddItem(TEMP, nullptr, 2);
-
-	TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsMedium.AthenaAmmoDataBulletsMedium"); Inventory->AddItem(TEMP, nullptr, 999);
-	TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsHeavy.AthenaAmmoDataBulletsHeavy"); Inventory->AddItem(TEMP, nullptr, 999);
-	TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataShells.AthenaAmmoDataShells"); Inventory->AddItem(TEMP, nullptr, 999); // ammo
-	TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsLight.AthenaAmmoDataBulletsLight"); Inventory->AddItem(TEMP, nullptr, 999);
-	TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AmmoDataRockets.AmmoDataRockets"); Inventory->AddItem(TEMP, nullptr, 999);
-
-	auto AR = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03"); Inventory->AddItem(AR, nullptr, 1);
-	auto Shotgun = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_AR.WID_Boss_Adventure_AR"); Inventory->AddItem(Shotgun, nullptr, 1);
-	auto SMG = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_GH.WID_Boss_Adventure_GH"); Inventory->AddItem(SMG, nullptr, 1);
-	auto SNIPER = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_Heavy_Athena_SR_Ore_T03.WID_Sniper_Heavy_Athena_SR_Ore_T03"); Inventory->AddItem(SNIPER, nullptr, 1);
-	auto FISH = FindObject<UFortItemDefinition>("/Game/Athena/Items/Consumables/ShockwaveGrenade/Athena_ShockGrenade.Athena_ShockGrenade"); Inventory->AddItem(FISH, nullptr, 6);
-
-	Inventory->Update();
 	auto CurrentPlayerState = Cast<AFortPlayerStateAthena>(PlayerController->GetPlayerState());
 
 	LOG_INFO(LogDev, "SKUNKY MONKEY: {}", CurrentPlayerState->GetPlayerName().ToString());
@@ -1527,9 +1537,9 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 	DeadPlayerState->EndDBNOAbilities();
 
 	if (GameState->GetPlayersLeft() == 0) { // this is 1 and not 0 because the server is counted as a player #skunkybozomilxnor	
-    	std::string serverrestart = "{\"content\":\"\",\"embeds\":[{\"title\":\"Servers Restarting!\",\"description\":\"Please be patient!\",\"color\":null,\"author\":{\"name\":\"flow gameserver\",\"icon_url\":\"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png\"},\"image\":{\"url\":\"https://i.ibb.co/9NmDLSJ/960x0.webp\"}}],\"attachments\":[]}";
+    	std::string serverrestart = "{\"content\":\"Server restarting code: `jagger` region: nae\",\"embeds\":null,\"attachments\":[]}";
 		UptimeWebHook.send_raw(serverrestart);
-		system("taskkill /f /im FortniteClient-Win64-*"); // so proper at least i kill eac and be though when trying through cmd be doesn't get killed but fn should have perm level to kill be
+		exit(0);
 	}
 
 	return ClientOnPawnDiedOriginal(PlayerController, DeathReport);

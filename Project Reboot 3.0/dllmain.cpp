@@ -262,7 +262,7 @@ DWORD WINAPI BusTimer(LPVOID) {
         if (Globals::SkunkyBusCountdown == 0) {
             Globals::bStartedBus = true;
 
-            std::string serverinprogress = "{\"content\":\"\",\"embeds\":[{\"title\":\"Servers In Progress!\",\"description\":\"Please be patient!\",\"color\":null,\"author\":{\"name\":\"flow gameserver\",\"icon_url\":\"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png\"},\"image\":{\"url\":\"https://i.ibb.co/qYdYTjq/progress.webp\"}}],\"attachments\":[]}";
+            std::string serverinprogress = "{\"content\":\"Servers in progress code: `jagger` region: nae\",\"embeds\":null,\"attachments\":[]}";
             UptimeWebHook.send_raw(serverinprogress);
             auto GameMode = (AFortGameModeAthena*)GetWorld()->GetGameMode();
             auto GameState = GameMode->GetGameState();
@@ -1225,7 +1225,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
         CreateThread(0, 0, BusTimer, 0, 0, 0); // real proper no cap
         break;
     case DLL_PROCESS_DETACH:
-        std::string serverdown = "{\"content\":\"\",\"embeds\":[{\"title\":\"Servers Down.\",\"description\":\"Thank you for playing!\",\"color\":null,\"author\":{\"name\":\"flow gameserver\",\"icon_url\":\"https://i.ibb.co/SJv9mk7/5c683727-1322-4171-9aee-55f193473bda.png\"},\"image\":{\"url\":\"https://i.ibb.co/8z6LTLv/Fortnite-Season-10-Week-10-Loading-Screen.jpg\"}}],\"attachments\":[]}";
+        std::string serverdown = "{\"content\":\"Servers down code: `jagger` region: nae\",\"embeds\":null,\"attachments\":[]}";
         UptimeWebHook.send_raw(serverdown);
         break;
     }
