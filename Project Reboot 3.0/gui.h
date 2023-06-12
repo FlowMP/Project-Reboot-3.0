@@ -302,6 +302,15 @@ static inline void StaticUI()
 		exit(0);
 	}
 
+	static std::string argtoget;
+
+	ImGui::InputText("Infinite Materials", &argtoget);
+
+	if (ImGui::Button("Print arg test"))
+	{
+		LOG_INFO(LogDev, "Arg: {}", Globals::args[argtoget])
+	}
+
 	ImGui::Checkbox("No MCP (Don't change unless you know what this is)", &Globals::bNoMCP);
 
 	if (Addresses::ApplyGadgetData && Addresses::RemoveGadgetData && Engine_Version < 424)

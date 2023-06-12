@@ -46,6 +46,8 @@
 #include "FortGameSessionDedicatedAthena.h"
 #include "FortAIEncounterInfo.h"
 
+#include <string>
+#include <codecvt>
 #include "discord.h"
 
 enum class EMeshNetworkNodeType : uint8_t
@@ -427,6 +429,27 @@ DWORD WINAPI Main(LPVOID)
 
     LOG_INFO(LogDev, "Fortnite_CL: {}", Fortnite_CL);
     LOG_INFO(LogDev, "Version: {}", Fortnite_Version);
+
+    std::string argsstr = UKismetSystemLibrary::GetFNCommandLine().ToString();
+
+    std::istringstream iss(argsstr);
+    std::string arg;
+    while (iss >> arg) {
+        // Split the argument into key and value
+        size_t equalPos = arg.find('=');
+        if (equalPos != std::string::npos) {
+            std::string key = arg.substr(1, equalPos - 1);  // Remove leading dash
+            std::string value = arg.substr(equalPos + 1);
+            Globals::args[key] = value;
+        }
+    }
+
+    if (Globals::args["playlist"] != "") PlaylistName = Globals::args["playlist"];
+
+    if (Globals::args["infammo"] != "") Globals::bInfiniteAmmo = stringtobool(Globals::args["infammo"]);
+    if (Globals::args["infmats"] != "") Globals::bInfiniteMaterials = stringtobool(Globals::args["infmats"]);
+
+    if (Globals::args["lategame"] != "") Globals::bLateGame = stringtobool(Globals::args["lategame"]);
 
     CreateThread(0, 0, GuiThread, 0, 0, 0);
 

@@ -715,32 +715,31 @@ void AFortPlayerController::ServerAttemptAircraftJumpHook(AFortPlayerController*
 			auto Inventory = PlayerController->GetWorldInventory();
 
 			UFortItemDefinition* TEMP;
-			TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/WoodItemData.WoodItemData"); Inventory->AddItem(TEMP, nullptr, 500);
-			TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/StoneItemData.StoneItemData"); Inventory->AddItem(TEMP, nullptr, 500); // mats
-			TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/MetalItemData.MetalItemData"); Inventory->AddItem(TEMP, nullptr, 500);
-			// TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Traps/TID_Floor_Player_Launch_Pad_Athena.TID_Floor_Player_Launch_Pad_Athena"); Inventory->AddItem(TEMP, nullptr, 2);
 
-			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsMedium.AthenaAmmoDataBulletsMedium"); Inventory->AddItem(TEMP, nullptr, 999);
-			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsHeavy.AthenaAmmoDataBulletsHeavy"); Inventory->AddItem(TEMP, nullptr, 999);
-			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataShells.AthenaAmmoDataShells"); Inventory->AddItem(TEMP, nullptr, 999); // ammo
-			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsLight.AthenaAmmoDataBulletsLight"); Inventory->AddItem(TEMP, nullptr, 999);
-			TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AmmoDataRockets.AmmoDataRockets"); Inventory->AddItem(TEMP, nullptr, 999);
+			//TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/WoodItemData.WoodItemData"); Inventory->AddItem(TEMP, nullptr, Globals::WoodCount);
+			//TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/StoneItemData.StoneItemData"); Inventory->AddItem(TEMP, nullptr, Globals::BrickCount); // mats
+			//TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/MetalItemData.MetalItemData"); Inventory->AddItem(TEMP, nullptr, Globals::MetalCount);
 
-			if (PlaylistName.contains("Playlist_Low")) {
-				auto AR = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_NoScope_Athena_UC_Ore_T03.WID_Sniper_NoScope_Athena_UC_Ore_T03"); Inventory->AddItem(AR, nullptr, 1);
-				auto Shotgun = FindObject<UFortItemDefinition>("/Mantis/Items/UncleBrolly/WID_UncleBrolly.WID_UncleBrolly"); Inventory->AddItem(Shotgun, nullptr, 1);
-				auto SMG = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_GH.WID_Boss_Adventure_GH"); Inventory->AddItem(SMG, nullptr, 1);
-				auto SNIPER = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Sniper_Heavy_Athena_SR_Ore_T03.WID_Sniper_Heavy_Athena_SR_Ore_T03"); Inventory->AddItem(SNIPER, nullptr, 1);
-				auto FISH = FindObject<UFortItemDefinition>("/Game/Athena/Items/Consumables/ShockwaveGrenade/Athena_ShockGrenade.Athena_ShockGrenade"); Inventory->AddItem(FISH, nullptr, 6);
+			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsMedium.AthenaAmmoDataBulletsMedium"); Inventory->AddItem(TEMP, nullptr, Globals::MediumBulletsCount);
+			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsHeavy.AthenaAmmoDataBulletsHeavy"); Inventory->AddItem(TEMP, nullptr, Globals::HeavyBulletsCount);
+			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataShells.AthenaAmmoDataShells"); Inventory->AddItem(TEMP, nullptr, Globals::ShellBulletsCount); // ammo
+			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsLight.AthenaAmmoDataBulletsLight"); Inventory->AddItem(TEMP, nullptr, Globals::LightBulletsCount);
+			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AmmoDataRockets.AmmoDataRockets"); Inventory->AddItem(TEMP, nullptr, Globals::RocketBulletsCount);
+
+			bool GivingItems = true;
+			for (int i = 1; GivingItems; i++) {
+				auto arg = Globals::args["item" + std::to_string(i)];
+				auto splitby = arg.find(':');
+				if (arg != "" && splitby != std::string::npos) {
+					std::string weapon = arg.substr(0, splitby);
+					int count = std::stoi(arg.substr(splitby + 1));
+					TEMP = Cast<UFortWorldItemDefinition>(FindObject(weapon, nullptr, ANY_PACKAGE)); Inventory->AddItem(TEMP, nullptr, count);
+				}
+				else {
+					GivingItems = false;
+				}
 			}
-			else {
-				auto AR = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/WID_Shotgun_Standard_Athena_SR_Ore_T03.WID_Shotgun_Standard_Athena_SR_Ore_T03"); Inventory->AddItem(AR, nullptr, 1);
-				auto Shotgun = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_AR.WID_Boss_Adventure_AR"); Inventory->AddItem(Shotgun, nullptr, 1);
-				auto SMG = FindObject<UFortItemDefinition>("/Game/Athena/Items/Weapons/Boss/WID_Boss_Adventure_GH.WID_Boss_Adventure_GH"); Inventory->AddItem(SMG, nullptr, 1);
-				auto SNIPER = FindObject<UFortItemDefinition>("/Game/Athena/Items/Consumables/Bucket/Nice/WID_Athena_Bucket_Nice.WID_Athena_Bucket_Nice"); Inventory->AddItem(SNIPER, nullptr, 1);
-				auto FISH = FindObject<UFortItemDefinition>("/Game/Athena/Items/Consumables/ShockwaveGrenade/Athena_ShockGrenade.Athena_ShockGrenade"); Inventory->AddItem(FISH, nullptr, 6);
-				NewPawnAsFort->SetShield(100);
-			}
+
 
 
 			Inventory->Update();
@@ -750,7 +749,7 @@ void AFortPlayerController::ServerAttemptAircraftJumpHook(AFortPlayerController*
 
 	auto CurrentPlayerState = Cast<AFortPlayerStateAthena>(PlayerController->GetPlayerState());
 
-	LOG_INFO(LogDev, "SKUNKY MONKEY: {}", CurrentPlayerState->GetPlayerName().ToString());
+	LOG_INFO(LogDev, "Bus Jump: {}", CurrentPlayerState->GetPlayerName().ToString());
 
 	// PlayerController->ServerRestartPlayer();
 	// return ServerAttemptAircraftJumpOriginal(PC, ClientRotation);

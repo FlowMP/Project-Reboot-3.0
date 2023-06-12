@@ -92,6 +92,19 @@ public:
 		return Ret;
 	}
 
+	static FString GetFNCommandLine() {
+		static auto GetPathNameFunction = FindObject<UFunction>("/Script/Engine.KismetSystemLibrary.GetCommandLine");
+		static auto KismetSystemLibrary = FindObject("/Script/Engine.Default__KismetSystemLibrary");
+
+		struct { FString ReturnValue; } GetPathName_Params{ };
+
+		KismetSystemLibrary->ProcessEvent(GetPathNameFunction, &GetPathName_Params);
+
+		auto Ret = GetPathName_Params.ReturnValue;
+
+		return Ret;
+	}
+
 	static void ExecuteConsoleCommand(UObject* WorldContextObject, const FString& Command, class APlayerController* SpecificPlayer)
 	{
 		static auto KismetSystemLibrary = FindObject("/Script/Engine.Default__KismetSystemLibrary");

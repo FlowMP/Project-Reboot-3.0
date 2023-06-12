@@ -47,6 +47,24 @@ static inline T* LoadObject(const TCHAR* Name, UClass* Class = T::StaticClass(),
 	return Object;
 }
 
+bool stringtobool(std::string str) {
+	if (str == "true") {
+		return true;
+	}
+	else if (str == "1") {
+		return true;
+	}
+	else if (str == "false") {
+		return false;
+	}
+	else if (str == "0") {
+		return false;
+	}
+	else {
+		throw std::invalid_argument("Invalid string");
+	}
+}
+
 template <typename T = UObject>
 static inline T* LoadObject(const std::string& NameStr, UClass* Class = nullptr, UObject* Outer = nullptr)
 {
@@ -215,6 +233,7 @@ inline void SetBitfield(void* Addr, uint8_t FieldMask, bool NewVal)
 	else if (FieldMask == 0xFF)
 		*(bool*)Bitfield = NewVal;
 }
+
 
 template<typename T = UObject>
 inline std::vector<T*> GetAllObjectsOfClass(UClass* Class)
