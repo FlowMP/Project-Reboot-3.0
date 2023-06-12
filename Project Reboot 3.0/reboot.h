@@ -47,7 +47,7 @@ static inline T* LoadObject(const TCHAR* Name, UClass* Class = T::StaticClass(),
 	return Object;
 }
 
-bool stringtobool(std::string str) {
+inline bool stringtobool(std::string str) {
 	if (str == "true") {
 		return true;
 	}
