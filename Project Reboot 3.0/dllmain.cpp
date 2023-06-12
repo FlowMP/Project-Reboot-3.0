@@ -47,7 +47,7 @@
 #include "FortAIEncounterInfo.h"
 
 #include <string>
-#include <codecvt>
+#include <format>
 #include "discord.h"
 
 enum class EMeshNetworkNodeType : uint8_t
@@ -264,8 +264,16 @@ DWORD WINAPI BusTimer(LPVOID) {
         if (Globals::SkunkyBusCountdown == 0) {
             Globals::bStartedBus = true;
 
-            std::string serverinprogress = "{\"content\":\"Servers in progress code: `jagger` region: nae\",\"embeds\":null,\"attachments\":[]}";
+            auto Playlist = FindObject<UFortPlaylist>(PlaylistName);
+            static auto UIDisplayNameOffset = Playlist->GetOffset("UIDisplayName");
+            static auto UIDisplaySubNameOffset = Playlist->GetOffset("UIDisplaySubName");
+            FString PlaylistNameFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplayNameOffset));
+            FString PlaylistTeamCountFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplaySubNameOffset));
+            std::string PlaylistNameStr = PlaylistNameFStr.ToString();
+            std::string PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString();
+            std::string serverinprogress = "{\"content\":\"Server in progress; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
             UptimeWebHook.send_raw(serverinprogress);
+
             auto GameMode = (AFortGameModeAthena*)GetWorld()->GetGameMode();
             auto GameState = GameMode->GetGameState();
             UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"startaircraft", nullptr);
@@ -430,7 +438,17 @@ DWORD WINAPI Main(LPVOID)
     LOG_INFO(LogDev, "Fortnite_CL: {}", Fortnite_CL);
     LOG_INFO(LogDev, "Version: {}", Fortnite_Version);
 
-    std::string argsstr = UKismetSystemLibrary::GetFNCommandLine().ToString();
+    auto lpCommandLine = GetCommandLineW();
+    std::string argsstr;
+
+    for (int i = 0; lpCommandLine[i] != NULL; i++) {
+        argsstr += lpCommandLine[i];
+    }
+
+    LOG_INFO(LogDev, "Fortnite_CMDL: {}", argsstr);
+
+    auto place = argsstr.find("FortniteClient-Win64-Shipping.exe");
+    argsstr.erase(0, place + 35);
 
     std::istringstream iss(argsstr);
     std::string arg;
@@ -445,10 +463,12 @@ DWORD WINAPI Main(LPVOID)
     }
 
     if (Globals::args["playlist"] != "") PlaylistName = Globals::args["playlist"];
+    if (Globals::args["mmcode"] != "") MMCode = Globals::args["mmcode"];
+    if (Globals::args["region"] != "") Region = Globals::args["region"];
+    if (Globals::args["port"] != "") PortToUse = std::stoi(Globals::args["port"]);
 
     if (Globals::args["infammo"] != "") Globals::bInfiniteAmmo = stringtobool(Globals::args["infammo"]);
     if (Globals::args["infmats"] != "") Globals::bInfiniteMaterials = stringtobool(Globals::args["infmats"]);
-
     if (Globals::args["lategame"] != "") Globals::bLateGame = stringtobool(Globals::args["lategame"]);
 
     CreateThread(0, 0, GuiThread, 0, 0, 0);
@@ -1248,7 +1268,14 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
         CreateThread(0, 0, BusTimer, 0, 0, 0); // real proper no cap
         break;
     case DLL_PROCESS_DETACH:
-        std::string serverdown = "{\"content\":\"Servers down code: `jagger` region: nae\",\"embeds\":null,\"attachments\":[]}";
+        auto Playlist = FindObject<UFortPlaylist>(PlaylistName);
+        static auto UIDisplayNameOffset = Playlist->GetOffset("UIDisplayName");
+        static auto UIDisplaySubNameOffset = Playlist->GetOffset("UIDisplaySubName");
+        FString PlaylistNameFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplayNameOffset));
+        FString PlaylistTeamCountFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplaySubNameOffset));
+        std::string PlaylistNameStr = PlaylistNameFStr.ToString();
+        std::string PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString();
+        std::string serverdown = "{\"content\":\"Server down; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
         UptimeWebHook.send_raw(serverdown);
         break;
     }

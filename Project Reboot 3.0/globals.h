@@ -35,6 +35,10 @@ namespace Globals
 
 extern inline int NumToSubtractFromSquadId = 0; // I think 2?
 
+extern inline std::string MMCode = "";
+extern inline std::string Region = "";
+extern inline int PortToUse = 7777;
+
 extern inline std::string PlaylistName =
 "/Game/Athena/Playlists/Playlist_DefaultSolo.Playlist_DefaultSolo";
 // "/Game/Athena/Playlists/gg/Playlist_Gg_Reverse.Playlist_Gg_Reverse";

@@ -1535,8 +1535,16 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 	DeadPlayerState->EndDBNOAbilities();
 
-	if (GameState->GetPlayersLeft() == 0) { // this is 1 and not 0 because the server is counted as a player #skunkybozomilxnor	
-    	std::string serverrestart = "{\"content\":\"Server restarting code: `jagger` region: nae\",\"embeds\":null,\"attachments\":[]}";
+	if (GameState->GetPlayersLeft() == 0) {
+		auto Playlist = FindObject<UFortPlaylist>(PlaylistName);
+		static auto UIDisplayNameOffset = Playlist->GetOffset("UIDisplayName");
+		static auto UIDisplaySubNameOffset = Playlist->GetOffset("UIDisplaySubName");
+		FString PlaylistNameFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplayNameOffset));
+		FString PlaylistTeamCountFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplaySubNameOffset));
+		std::string PlaylistNameStr = PlaylistNameFStr.ToString();
+		std::string PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString();
+		// `{}` region: {} Playlist: {} {}\",\"embeds\":null,\"attachments\":[]}"
+		std::string serverrestart = "{\"content\":\"Server restarting; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
 		UptimeWebHook.send_raw(serverrestart);
 		exit(0);
 	}

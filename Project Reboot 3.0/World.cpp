@@ -21,7 +21,7 @@ void UWorld::Listen()
 
 	constexpr bool bUseBeacons = true;
 
-	int Port = 7777 - Globals::AmountOfListens + 1;
+	int Port = PortToUse - Globals::AmountOfListens + 1;
 
 	if (bUseBeacons)
 	{

@@ -730,7 +730,15 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 			Bots::SpawnBotsAtPlayerStarts(AmountOfBotsToSpawn);
 		}
 
-		std::string serverup = "{\"content\":\"<@&1113589635239657482> Ready up code: `jagger` region: nae\",\"embeds\":null,\"attachments\":[]}";
+		auto Playlist = FindObject<UFortPlaylist>(PlaylistName);
+
+		static auto UIDisplayNameOffset = Playlist->GetOffset("UIDisplayName");
+		static auto UIDisplaySubNameOffset = Playlist->GetOffset("UIDisplaySubName");
+		FString PlaylistNameFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplayNameOffset));
+		FString PlaylistTeamCountFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplaySubNameOffset));
+		std::string PlaylistNameStr = PlaylistNameFStr.ToString();
+		std::string PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); // <@&1113589635239657482> <-- mp notify role
+		std::string serverup = "{\"content\":\"<@&1113589635239657482> Ready up; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
 
 		UptimeWebHook.send_raw(serverup); // PlaylistName sometimes isn't always what we use!
 
