@@ -270,7 +270,8 @@ DWORD WINAPI BusTimer(LPVOID) {
             FString PlaylistNameFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplayNameOffset));
             FString PlaylistTeamCountFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplaySubNameOffset));
             std::string PlaylistNameStr = PlaylistNameFStr.ToString();
-            std::string PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString();
+            std::string PlaylistTeamCountStr;
+            if (UIDisplaySubNameOffset) PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); else PlaylistTeamCountStr = "";
             std::string serverinprogress = "{\"content\":\"Server in progress; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
             UptimeWebHook.send_raw(serverinprogress);
 
@@ -467,6 +468,7 @@ DWORD WINAPI Main(LPVOID)
     if (Globals::args["region"] != "") Region = Globals::args["region"];
     if (Globals::args["port"] != "") PortToUse = std::stoi(Globals::args["port"]);
 
+    if (Globals::args["siphon"] != "") AmountOfHealthSiphon = std::stoi(Globals::args["siphon"]);
     if (Globals::args["infammo"] != "") Globals::bInfiniteAmmo = stringtobool(Globals::args["infammo"]);
     if (Globals::args["infmats"] != "") Globals::bInfiniteMaterials = stringtobool(Globals::args["infmats"]);
     if (Globals::args["lategame"] != "") Globals::bLateGame = stringtobool(Globals::args["lategame"]);
@@ -1274,7 +1276,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
         FString PlaylistNameFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplayNameOffset));
         FString PlaylistTeamCountFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplaySubNameOffset));
         std::string PlaylistNameStr = PlaylistNameFStr.ToString();
-        std::string PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString();
+        std::string PlaylistTeamCountStr;
+        if (UIDisplaySubNameOffset) PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); else PlaylistTeamCountStr = "";
         std::string serverdown = "{\"content\":\"Server down; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
         UptimeWebHook.send_raw(serverdown);
         break;

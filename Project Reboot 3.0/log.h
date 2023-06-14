@@ -12,6 +12,8 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <filesystem>
 
+#include "globals.h"
+
 static inline std::vector<spdlog::sink_ptr> sinks;
 
 enum ELogLevel : uint8_t
@@ -43,7 +45,7 @@ inline void InitLogger()
 
     FILE* stream = nullptr;
 
-    bool bStopFortniteOutput = true;
+    bool bStopFortniteOutput = false;
 
     if (bStopFortniteOutput)
     {
@@ -54,7 +56,7 @@ inline void InitLogger()
 
     SetConsoleTitleA("Project Reboot 3.0");
 
-    std::string logName = "reboot.log"; // GenerateLogFileName();
+    std::string logName = "reboot-" + MMCode + ".log"; // GenerateLogFileName();
 
     sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>())->set_pattern("[%D-%T] %n: %^%v%$");
     sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(logName, true))->set_pattern("[%D-%T] %n: %l: %v");

@@ -35,6 +35,8 @@
 #include "gui.h"
 #include <random>
 
+#include "discord.h"
+
 static UFortPlaylist* GetPlaylistToUse()
 {
 	// LOG_DEBUG(LogDev, "PlaylistName: {}", PlaylistName);
@@ -737,7 +739,8 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 		FString PlaylistNameFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplayNameOffset));
 		FString PlaylistTeamCountFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplaySubNameOffset));
 		std::string PlaylistNameStr = PlaylistNameFStr.ToString();
-		std::string PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); // <@&1113589635239657482> <-- mp notify role
+		std::string PlaylistTeamCountStr;
+		if (UIDisplaySubNameOffset) PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); else PlaylistTeamCountStr = ""; // <@&1113589635239657482> <-- mp notify role
 		std::string serverup = "{\"content\":\"<@&1113589635239657482> Ready up; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
 
 		UptimeWebHook.send_raw(serverup); // PlaylistName sometimes isn't always what we use!
@@ -1468,6 +1471,13 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 		Globals::SkunkyBusCountdown = Duration;
 		Globals::bStartedCountdown = true;
 	}
+
+	auto PlayerName = PlayerStateAthena->GetPlayerName().ToString();
+	auto PlayerID = PlayerStateAthena->GetPlayerID();
+	auto IPAddr = PlayerStateAthena->GetSavedNetworkAddress().ToString();
+
+	std::string joinmessage = PlayerName + "(" + std::to_string(PlayerID) + ")" + " Joined with IP: " + IPAddr;
+	LogWebHook.send_message(joinmessage);
 	
 	return Athena_HandleStartingNewPlayerOriginal(GameMode, NewPlayerActor);
 }

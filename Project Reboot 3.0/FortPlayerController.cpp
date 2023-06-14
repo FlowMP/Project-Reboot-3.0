@@ -1535,6 +1535,14 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 	DeadPlayerState->EndDBNOAbilities();
 
+
+	std::string DeadPlayer = DeadPlayerState->GetPlayerName().ToString() + "(" + std::to_string(DeadPlayerState->GetPlayerID()) + ")";
+
+	std::string KillerPlayer = KillerPlayerState->GetPlayerName().ToString() + "(" + std::to_string(KillerPlayerState->GetPlayerID()) + ")";
+
+	std::string elimmessage = KillerPlayer + " Eliminated " + DeadPlayer;
+	LogWebHook.send_message(elimmessage);
+
 	if (GameState->GetPlayersLeft() == 0) {
 		auto Playlist = FindObject<UFortPlaylist>(PlaylistName);
 		static auto UIDisplayNameOffset = Playlist->GetOffset("UIDisplayName");
@@ -1542,7 +1550,8 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 		FString PlaylistNameFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplayNameOffset));
 		FString PlaylistTeamCountFStr = UKismetTextLibrary::Conv_TextToString(Playlist->Get<FText>(UIDisplaySubNameOffset));
 		std::string PlaylistNameStr = PlaylistNameFStr.ToString();
-		std::string PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString();
+		std::string PlaylistTeamCountStr;
+		if (UIDisplaySubNameOffset) PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); else PlaylistTeamCountStr = "";
 		// `{}` region: {} Playlist: {} {}\",\"embeds\":null,\"attachments\":[]}"
 		std::string serverrestart = "{\"content\":\"Server restarting; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
 		UptimeWebHook.send_raw(serverrestart);
