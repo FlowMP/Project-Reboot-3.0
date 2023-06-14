@@ -741,8 +741,8 @@ bool AFortGameModeAthena::Athena_ReadyToStartMatchHook(AFortGameModeAthena* Game
 		std::string PlaylistNameStr = PlaylistNameFStr.ToString();
 		std::string PlaylistTeamCountStr;
 		if (UIDisplaySubNameOffset) PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); else PlaylistTeamCountStr = ""; // <@&1113589635239657482> <-- mp notify role
+		if (Globals::bLateGame) PlaylistNameStr += " Lategame";
 		std::string serverup = "{\"content\":\"<@&1113589635239657482> Ready up; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
-
 		UptimeWebHook.send_raw(serverup); // PlaylistName sometimes isn't always what we use!
 
 		if (std::floor(Fortnite_Version) == 5)

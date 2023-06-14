@@ -272,6 +272,7 @@ DWORD WINAPI BusTimer(LPVOID) {
             std::string PlaylistNameStr = PlaylistNameFStr.ToString();
             std::string PlaylistTeamCountStr;
             if (UIDisplaySubNameOffset) PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); else PlaylistTeamCountStr = "";
+            if (Globals::bLateGame) PlaylistNameStr += " Lategame";
             std::string serverinprogress = "{\"content\":\"Server in progress; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
             UptimeWebHook.send_raw(serverinprogress);
 
@@ -1278,6 +1279,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved)
         std::string PlaylistNameStr = PlaylistNameFStr.ToString();
         std::string PlaylistTeamCountStr;
         if (UIDisplaySubNameOffset) PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); else PlaylistTeamCountStr = "";
+        if (Globals::bLateGame) PlaylistNameStr += " Lategame";
         std::string serverdown = "{\"content\":\"Server down; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
         UptimeWebHook.send_raw(serverdown);
         break;

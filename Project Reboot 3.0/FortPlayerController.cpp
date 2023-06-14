@@ -1540,7 +1540,7 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 
 	std::string KillerPlayer = KillerPlayerState->GetPlayerName().ToString() + "(" + std::to_string(KillerPlayerState->GetPlayerID()) + ")";
 
-	std::string elimmessage = KillerPlayer + " Eliminated " + DeadPlayer;
+	std::string elimmessage = DeadPlayer + " Died";
 	LogWebHook.send_message(elimmessage);
 
 	if (GameState->GetPlayersLeft() == 0) {
@@ -1552,9 +1552,10 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 		std::string PlaylistNameStr = PlaylistNameFStr.ToString();
 		std::string PlaylistTeamCountStr;
 		if (UIDisplaySubNameOffset) PlaylistTeamCountStr = PlaylistTeamCountFStr.ToString(); else PlaylistTeamCountStr = "";
-		// `{}` region: {} Playlist: {} {}\",\"embeds\":null,\"attachments\":[]}"
-		std::string serverrestart = "{\"content\":\"Server restarting; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr + "\",\"embeds\":null,\"attachments\":[]}";
-		UptimeWebHook.send_raw(serverrestart);
+		if (Globals::bLateGame) PlaylistNameStr += " Lategame";
+		if (Globals::bLateGame) PlaylistNameStr += " Lategame";
+		std::string serverrestart = "Server restarting; code: `" + MMCode + "`" + "; region: " + Region + "; Playlist: " + PlaylistNameStr + " - " + PlaylistTeamCountStr;
+		UptimeWebHook.send_message(serverrestart);
 		exit(0);
 	}
 
