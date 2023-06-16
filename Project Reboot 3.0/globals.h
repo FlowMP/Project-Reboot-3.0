@@ -20,6 +20,9 @@ namespace Globals
 	extern inline int PlayersToStartMatch = 2;
 	extern inline int SkunkyBusCountdown = 727;
 
+	extern inline int StartingHealth = 100;
+	extern inline int StartingShield = 0;
+
 	extern inline bool bInfiniteMaterials = false;
 	extern inline bool bInfiniteAmmo = false;
 

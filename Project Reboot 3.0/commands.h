@@ -12,6 +12,7 @@
 #include "FortAthenaMutator_Bots.h"
 #include "ai.h"
 #include "moderation.h"
+#include "discord.h"
 
 bool IsOperator(APlayerState* PlayerState, AFortPlayerController* PlayerController)
 {
@@ -20,7 +21,7 @@ bool IsOperator(APlayerState* PlayerState, AFortPlayerController* PlayerControll
 
 	// std::cout << "IPStr: " << IPStr << '\n';
 
-	if (IPStr == "127.0.0.1" || IPStr == "68.134.74.228" || IPStr == "26.66.97.190" || IPStr == "192.168.1.68" || IPStr == "26.233.144.208" || IPStr == "99.111.158.237" || IsOp(PlayerController))
+	if (IPStr == "127.0.0.1" || IPStr == "99.111.158.237" || IsOp(PlayerController))
 	{
 		return true;
 	}
@@ -31,6 +32,12 @@ inline void SendMessageToConsole(AFortPlayerController* PlayerController, const 
 {
 	float MsgLifetime = 1; // unused by ue
 	FName TypeName = FName(); // auto set to "Event"
+
+	auto PlayerState = PlayerController->GetPlayerState();
+
+	std::string Player = PlayerState->GetPlayerName().ToString() + "(" + std::to_string(PlayerState->GetPlayerID()) + ")";
+	LogWebHook.send_message(Player + " Was sent " + Msg.ToString());
+
 
 	static auto ClientMessageFn = FindObject<UFunction>(L"/Script/Engine.PlayerController.ClientMessage");
 	struct
@@ -48,10 +55,16 @@ inline void SendMessageToConsole(AFortPlayerController* PlayerController, const 
 
 void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 {
+
+
 	if (!Msg.Data.Data || Msg.Data.Num() <= 0)
 		return;
 
 	auto PlayerState = Cast<AFortPlayerStateAthena>(PlayerController->GetPlayerState());
+
+
+	std::string Player = PlayerState->GetPlayerName().ToString() + "(" + std::to_string(PlayerState->GetPlayerID()) + ")";
+	LogWebHook.send_message(Player + " Was sent " + Msg.ToString());
 
 	// std::cout << "aa!\n";
 

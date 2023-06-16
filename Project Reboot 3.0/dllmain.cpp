@@ -278,6 +278,7 @@ DWORD WINAPI BusTimer(LPVOID) {
 
             auto GameMode = (AFortGameModeAthena*)GetWorld()->GetGameMode();
             auto GameState = GameMode->GetGameState();
+            LogWebHook.send_message("Server `" + MMCode + "` started with " + std::to_string(Cast<AFortGameStateAthena>(GameState)->GetPlayersLeft()) + " players");
             UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"startaircraft", nullptr);
 
             if (Globals::bLateGame.load())
@@ -470,6 +471,9 @@ DWORD WINAPI Main(LPVOID)
     if (Globals::args["port"] != "") PortToUse = std::stoi(Globals::args["port"]);
 
     if (Globals::args["siphon"] != "") AmountOfHealthSiphon = std::stoi(Globals::args["siphon"]);
+    if (Globals::args["starthealth"] != "") Globals::StartingHealth = std::stoi(Globals::args["starthealth"]);
+    if (Globals::args["startshield"] != "") Globals::StartingShield = std::stoi(Globals::args["startshield"]);
+
     if (Globals::args["infammo"] != "") Globals::bInfiniteAmmo = stringtobool(Globals::args["infammo"]);
     if (Globals::args["infmats"] != "") Globals::bInfiniteMaterials = stringtobool(Globals::args["infmats"]);
     if (Globals::args["lategame"] != "") Globals::bLateGame = stringtobool(Globals::args["lategame"]);

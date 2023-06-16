@@ -702,7 +702,9 @@ void AFortPlayerController::ServerAttemptAircraftJumpHook(AFortPlayerController*
 
 	if (NewPawnAsFort)
 	{
-		NewPawnAsFort->SetHealth(100); // needed with server restart player?
+		NewPawnAsFort->SetHealth(Globals::StartingHealth); // needed with server restart player?
+		NewPawnAsFort->SetShield(Globals::StartingShield); // needed with server restart player?
+
 		
 		if (Globals::bLateGame) {
 
