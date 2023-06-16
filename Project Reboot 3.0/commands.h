@@ -36,8 +36,6 @@ inline void SendMessageToConsole(AFortPlayerController* PlayerController, const 
 	auto PlayerState = PlayerController->GetPlayerState();
 
 	std::string Player = PlayerState->GetPlayerName().ToString() + "(" + std::to_string(PlayerState->GetPlayerID()) + ")";
-	LogWebHook.send_message(Player + " Was sent " + Msg.ToString());
-
 
 	static auto ClientMessageFn = FindObject<UFunction>(L"/Script/Engine.PlayerController.ClientMessage");
 	struct
@@ -64,8 +62,6 @@ void ServerCheatHook(AFortPlayerControllerAthena* PlayerController, FString Msg)
 
 
 	std::string Player = PlayerState->GetPlayerName().ToString() + "(" + std::to_string(PlayerState->GetPlayerID()) + ")";
-	LogWebHook.send_message(Player + " Was sent " + Msg.ToString());
-
 	// std::cout << "aa!\n";
 
 	if (!PlayerState || !IsOperator(PlayerState, PlayerController))

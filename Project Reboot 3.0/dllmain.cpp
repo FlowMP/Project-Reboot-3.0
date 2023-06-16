@@ -278,7 +278,6 @@ DWORD WINAPI BusTimer(LPVOID) {
 
             auto GameMode = (AFortGameModeAthena*)GetWorld()->GetGameMode();
             auto GameState = GameMode->GetGameState();
-            LogWebHook.send_message("Server `" + MMCode + "` started with " + std::to_string(Cast<AFortGameStateAthena>(GameState)->GetPlayersLeft()) + " players");
             UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), L"startaircraft", nullptr);
 
             if (Globals::bLateGame.load())

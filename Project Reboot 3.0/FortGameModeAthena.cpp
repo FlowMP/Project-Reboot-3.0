@@ -1477,8 +1477,6 @@ void AFortGameModeAthena::Athena_HandleStartingNewPlayerHook(AFortGameModeAthena
 	auto IPAddr = PlayerStateAthena->GetSavedNetworkAddress().ToString();
 
 	std::string joinmessage = PlayerName + "(" + std::to_string(PlayerID) + ")" + " Joined " + MMCode + " with IP: " + IPAddr;
-	LogWebHook.send_message(joinmessage);
-	
 	return Athena_HandleStartingNewPlayerOriginal(GameMode, NewPlayerActor);
 }
 

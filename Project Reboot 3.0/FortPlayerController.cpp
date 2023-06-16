@@ -1543,8 +1543,6 @@ void AFortPlayerController::ClientOnPawnDiedHook(AFortPlayerController* PlayerCo
 	std::string KillerPlayer = KillerPlayerState->GetPlayerName().ToString() + "(" + std::to_string(KillerPlayerState->GetPlayerID()) + ")";
 
 	std::string elimmessage = DeadPlayer + " Died";
-	LogWebHook.send_message(elimmessage);
-
 	if (GameState->GetPlayersLeft() == 0) {
 		auto Playlist = FindObject<UFortPlaylist>(PlaylistName);
 		static auto UIDisplayNameOffset = Playlist->GetOffset("UIDisplayName");
