@@ -713,39 +713,27 @@ void AFortPlayerController::ServerAttemptAircraftJumpHook(AFortPlayerController*
 			busses.Num();
 			
 			NewPawnAsFort->TeleportTo(busses.at(0)->GetActorLocation(), {0, 0, 0});
-
-			auto Inventory = PlayerController->GetWorldInventory();
-
-			UFortItemDefinition* TEMP;
-
-			//TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/WoodItemData.WoodItemData"); Inventory->AddItem(TEMP, nullptr, Globals::WoodCount);
-			//TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/StoneItemData.StoneItemData"); Inventory->AddItem(TEMP, nullptr, Globals::BrickCount); // mats
-			//TEMP = FindObject<UFortItemDefinition>("/Game/Items/ResourcePickups/MetalItemData.MetalItemData"); Inventory->AddItem(TEMP, nullptr, Globals::MetalCount);
-
-			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsMedium.AthenaAmmoDataBulletsMedium"); Inventory->AddItem(TEMP, nullptr, Globals::MediumBulletsCount);
-			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsHeavy.AthenaAmmoDataBulletsHeavy"); Inventory->AddItem(TEMP, nullptr, Globals::HeavyBulletsCount);
-			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataShells.AthenaAmmoDataShells"); Inventory->AddItem(TEMP, nullptr, Globals::ShellBulletsCount); // ammo
-			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AthenaAmmoDataBulletsLight.AthenaAmmoDataBulletsLight"); Inventory->AddItem(TEMP, nullptr, Globals::LightBulletsCount);
-			//TEMP = FindObject<UFortItemDefinition>("/Game/Athena/Items/Ammo/AmmoDataRockets.AmmoDataRockets"); Inventory->AddItem(TEMP, nullptr, Globals::RocketBulletsCount);
-
-			bool GivingItems = true;
-			for (int i = 1; GivingItems; i++) {
-				auto arg = Globals::args["item" + std::to_string(i)];
-				auto splitby = arg.find(':');
-				if (arg != "" && splitby != std::string::npos) {
-					std::string weapon = arg.substr(0, splitby);
-					int count = std::stoi(arg.substr(splitby + 1));
-					TEMP = Cast<UFortWorldItemDefinition>(FindObject(weapon, nullptr, ANY_PACKAGE)); Inventory->AddItem(TEMP, nullptr, count);
-				}
-				else {
-					GivingItems = false;
-				}
-			}
-
-
-
-			Inventory->Update();
 		}
+
+		auto Inventory = PlayerController->GetWorldInventory();
+
+		UFortItemDefinition* TEMP;
+
+		bool GivingItems = true;
+		for (int i = 1; GivingItems; i++) {
+			auto arg = Globals::args["item" + std::to_string(i)];
+			auto splitby = arg.find(':');
+			if (arg != "" && splitby != std::string::npos) {
+				std::string weapon = arg.substr(0, splitby);
+				int count = std::stoi(arg.substr(splitby + 1));
+				TEMP = Cast<UFortWorldItemDefinition>(FindObject(weapon, nullptr, ANY_PACKAGE)); Inventory->AddItem(TEMP, nullptr, count);
+			}
+			else {
+				GivingItems = false;
+			}
+		}
+
+		Inventory->Update();
 
 	}
 
