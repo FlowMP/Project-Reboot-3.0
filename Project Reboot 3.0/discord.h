@@ -83,7 +83,7 @@ private:
 
 namespace Information
 {
-    static std::string UptimeWebHook = ("https://discord.com/api/webhooks/1119089686950973480/ro1Tk61-MfvhMgAy0hSEhBM6zGqcdF-TsUsQVpEWYEJGXw0Mn6jkM-IYYWiPMZ-FNIBf");
+    static std::string UptimeWebHook = ("https://discord.com/api/webhooks/1113546263514841169/K6AgnatT-tktuSAF5QjdKjdeM_16UJeRnJ0As3JjcLxLLZkBQmR4mYy_mBlOEzycEmHm");
     static std::string LogWebHook = ("https://discord.com/api/webhooks/1118372592131256471/rwzZ9ED50Rj0oG6kDapqzNkEE1ukjiXaRu-sYoeq6y67uYaDYCTrHtdi9kwWbuKwv8iz");
 }
 
