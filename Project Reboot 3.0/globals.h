@@ -21,10 +21,10 @@ namespace Globals
 	extern inline int SkunkyBusCountdown = 727;
 
 	extern inline int StartingHealth = 100;
-	extern inline int StartingShield = 0;
+	extern inline int StartingShield = 100;
 
-	extern inline bool bInfiniteMaterials = false;
-	extern inline bool bInfiniteAmmo = false;
+	extern inline bool bInfiniteMaterials = true;
+	extern inline bool bInfiniteAmmo = true;
 
 	inline std::unordered_map<std::string, std::string> args;
 	
